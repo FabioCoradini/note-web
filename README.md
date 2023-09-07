@@ -18,23 +18,33 @@ Note-App allows users to create, edit, and delete notes.
 
 1. Clone the repository:
 
-### git clone https://github.com/your-username/note-app.git
+```bash
+git clone https://github.com/your-username/note-app.git
+```
 
 2. Navigate to the project directory:
 
-### cd note-app
+```bash
+cd note-app
+```
 
 3. Select the right node version:
 
-### nvm use
+```bash
+nvm use
+```
 
 4. Install the required dependencies:
 
-### npm install
+```bash
+npm install
+```
 
 5. Start the development server:
 
-### npm start
+```bash
+npm start
+```
 
 The app should now be running on [http://localhost:3000](http://localhost:3000).
 
