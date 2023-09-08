@@ -1,6 +1,6 @@
 import { trackApiCall } from "../analytics";
 
-const BASE_URL = "https://localhost:7215/api/v1/notes"; //process.env.BASE_URL_NOTE_API;
+const BASE_URL = process.env.REACT_APP_BASE_URL_NOTE_API;
 
 export const createNote = async (note) => {
   try {

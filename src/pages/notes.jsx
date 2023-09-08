@@ -3,7 +3,8 @@ import _ from "loadsh";
 import { getAllNotes, deleteNote } from "../services/NoteService";
 import { Link } from "react-router-dom";
 import NoteCardList from "../components/noteCardList";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, CircularProgress } from "@mui/material";
+import { trackEvent } from "../analytics";
 
 class Notes extends Component {
   state = {
@@ -18,13 +19,17 @@ class Notes extends Component {
     });
   }
 
-  handleDelete = (note) => {
+  handleDelete = async (note) => {
     deleteNote(note.id);
-    this.setState({ notes: getAllNotes() });
+    this.setState({ notes: await getAllNotes() });
   };
 
   handleSearch = (e) => {
     this.setState({ searchQuery: e.target.value });
+
+    if (e.target.value) {
+      trackEvent("Note", "User", "Performed a Search");
+    }
   };
 
   getData() {
@@ -43,7 +48,7 @@ class Notes extends Component {
     const { length: count } = this.state.notes;
     const { searchQuery } = this.state;
 
-    if (count === 0) return "No notes in Database";
+    if (count === 0) return <CircularProgress />;
 
     const { data: notes } = this.getData();
 
@@ -65,7 +70,7 @@ class Notes extends Component {
             </Link>
           </Box>
 
-          {<NoteCardList notes={notes} />}
+          <NoteCardList notes={notes} />
         </div>
       </div>
     );

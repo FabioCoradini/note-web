@@ -1,9 +1,10 @@
 // import ReactGA from "react-ga";
 import ReactGA from "react-ga4";
 
-const GOOGLE_ANALYTICS_TRACKING_ID = ""; // process.env.GOOGLE_ANALYTICS_TRACKING_ID
+const REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID =
+  process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID;
 export const initGA = () => {
-  ReactGA.initialize(GOOGLE_ANALYTICS_TRACKING_ID);
+  ReactGA.initialize(REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID);
 };
 
 export const logPageView = () => {
