@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import Notes from "./pages/notes";
-import NavBar from "./components/navbar";
+import NavBar from "./components/common/navbar";
 import NotFound from "./pages/notFound";
 import DeleteNote from "./pages/deleteNote";
 import { initGA, logPageView } from "./analytics";

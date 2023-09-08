@@ -1,4 +1,4 @@
-﻿import React, { Component } from "react";
+import React, { Component } from "react";
 import _ from "loadsh";
 import { getAllNotes, deleteNote } from "../services/NoteService";
 import { Link } from "react-router-dom";
