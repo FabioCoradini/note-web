@@ -40,6 +40,15 @@ nvm use
 npm install
 ```
 
+4. Create .env file in the root:
+
+```bash
+GOOGLE_ANALYTICS_TRACKING_ID=xxxx
+BASE_URL_NOTE_API=xxx
+```
+
+You can find the env param values on the document on slack. 
+
 5. Start the development server:
 
 ```bash
