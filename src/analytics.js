@@ -1,7 +1,8 @@
 // import ReactGA from "react-ga";
 import ReactGA from "react-ga4";
 
-const REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID = "G-PLZMQ7DP7Q";
+const REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID =
+  process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID;
 export const initGA = () => {
   ReactGA.initialize(REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID);
 };
