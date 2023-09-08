@@ -1,6 +1,8 @@
-# Note-App
+# Note-App-Web
 
 Welcome to Note-App, a simple React application for jotting down and managing your notes!
+
+[Dev env remote](https://main--cozy-sunburst-875517.netlify.app/notes)
 
 ## Description
 
