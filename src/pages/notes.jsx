@@ -1,80 +1,64 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { useNotes } from "../hooks/useNotes";
 import _ from "loadsh";
-import { getAllNotes, deleteNote } from "../services/NoteService";
 import { Link } from "react-router-dom";
 import NoteCardList from "../components/noteCardList";
 import { Box, Button, TextField, CircularProgress } from "@mui/material";
 import { trackEvent } from "../analytics";
 
-class Notes extends Component {
-  state = {
-    notes: [],
-    searchQuery: "",
-  };
-  search = React.createRef();
+const Notes = () => {
+  const { notes, error, loading } = useNotes();
+  const [searchQuery, setSearchQuery] = useState("");
 
-  async componentDidMount() {
-    this.setState({
-      notes: await getAllNotes(),
-    });
-  }
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
 
-  handleDelete = async (note) => {
-    deleteNote(note.id);
-    this.setState({ notes: await getAllNotes() });
-  };
-
-  handleSearch = (e) => {
-    this.setState({ searchQuery: e.target.value });
-
-    if (e.target.value) {
+    if (query) {
       trackEvent("Note", "User", "Performed a Search");
     }
   };
 
-  getData() {
-    const { notes: allNotes, searchQuery } = this.state;
-    let filtered = allNotes;
+  const getData = () => {
+    let filtered = notes;
     if (searchQuery)
-      filtered = allNotes.filter((m) =>
+      filtered = notes.filter((m) =>
         m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
     let orderBy = _.orderBy(filtered, ["dateCreation"], ["desc"]);
 
     return { data: orderBy };
-  }
+  };
 
-  render() {
-    const { length: count } = this.state.notes;
-    const { searchQuery } = this.state;
+  const { length: count } = notes;
 
-    if (count === 0) return <CircularProgress />;
+  if (count === 0) return <CircularProgress />;
 
-    const { data: notes } = this.getData();
+  const { data: notesData } = getData();
 
-    return (
-      <div className="row m-2">
-        <div className="col">
-          <Box display="flex" justifyContent="space-between" marginBottom={2}>
-            <TextField
-              label="Search"
-              variant="outlined"
-              value={searchQuery}
-              onChange={this.handleSearch}
-              style={{ flex: 1, marginRight: 10 }}
-            />
-            <Link to="/notes/new">
-              <Button variant="contained" color="primary">
-                Add New Note
-              </Button>
-            </Link>
-          </Box>
+  return (
+    <div className="row m-2">
+      <div className="col">
+        <Box display="flex" justifyContent="space-between" marginBottom={2}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            value={searchQuery}
+            onChange={handleSearch}
+            style={{ flex: 1, marginRight: 10 }}
+          />
+          <Link to="/notes/new">
+            <Button variant="contained" color="primary">
+              Add New Note
+            </Button>
+          </Link>
+        </Box>
 
-          <NoteCardList notes={notes} />
-        </div>
+        {loading ? <CircularProgress /> : <NoteCardList notes={notesData} />}
+        {error && <p>{error}</p>}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Notes;

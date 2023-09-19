@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useNotes } from "../hooks/useNotes";
 import Joi from "joi-browser";
 import { Button, TextField, Paper, Typography } from "@mui/material";
-import { createNote } from "../services/NoteService";
 
 const CreateForm = () => {
+  const { createNote, loading } = useNotes();
   const [note, setNote] = useState({
     title: "",
     body: "",
   });
-  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   // Joi schema for validation
   const schema = {
@@ -88,7 +89,7 @@ const CreateForm = () => {
           color="primary"
           style={{ marginTop: "20px" }}
         >
-          Save
+          {loading ? "Creating..." : "Create"}
         </Button>
       </form>
     </Paper>

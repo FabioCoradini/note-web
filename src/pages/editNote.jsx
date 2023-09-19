@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNotes } from "../hooks/useNotes";
+import { useNavigate } from "react-router-dom";
+
 import Joi from "joi-browser";
 import { Button, TextField, Paper, Typography } from "@mui/material";
-import { getNoteById, updateNote } from "../services/NoteService";
 
-const EditNote = () => {
-  const { id } = useParams();
-  const [note, setNote] = useState({
-    id: "",
-    title: "",
-    body: "",
-  });
+let newNote = {
+  id: "",
+  title: "",
+  body: "",
+};
+
+const EditNote = ({ id }) => {
+  const { notes, updateNote, loading } = useNotes();
+  const [note, setNote] = useState({ ...newNote });
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    const fetchNote = async () => {
-      const fetchedNote = await getNoteById(id);
-      setNote(fetchedNote);
-    };
-    fetchNote();
-  }, [id]);
+    setNote(
+      notes.find((note) => {
+        return note.id === Number(id);
+      }) || { ...newNote }
+    );
+  }, [id, notes]);
 
   const schema = {
     id: Joi.required(),
@@ -104,8 +107,13 @@ const EditNote = () => {
           >
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="primary">
-            Update
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>

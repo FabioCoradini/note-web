@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deleteNote } from "../services/NoteService";
 import NoteDisplay from "../components/noteDisplay";
 import ButtonGroup from "../components/common/ButtonGroup";
-import { useNote } from "../hooks/useNote";
+import { useNotes } from "../hooks/useNotes";
 import { trackEvent } from "../analytics";
 
-const DeleteNote = () => {
-  const note = useNote();
+const DeleteNote = ({ id }) => {
+  const { notes, removeNote } = useNotes();
+  const [note, setNote] = useState({});
   const navigate = useNavigate();
+  useEffect(() => {
+    setNote(
+      notes.find((note) => {
+        return note.id === Number(id);
+      })
+    );
+  }, [id, notes]);
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
@@ -16,7 +23,7 @@ const DeleteNote = () => {
     );
     if (confirmDelete) {
       trackEvent("Note", "Delete Confirmation", "Delete Note");
-      await deleteNote(id);
+      await removeNote(id);
       navigate("/notes");
     }
   };
@@ -39,7 +46,7 @@ const DeleteNote = () => {
 
   return (
     <>
-      <NoteDisplay title={note.title} body={note.body} />
+      <NoteDisplay {...note} />
       <ButtonGroup actions={actions} />
     </>
   );
